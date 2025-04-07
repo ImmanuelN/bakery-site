@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flour & Flame Bakery - Artisanal Breads & Pastries</title>
+    <link rel="icon" type="image/png" href="bagel.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,9 +21,8 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow: hidden; /* Prevent scrolling during loading */
+            overflow: hidden;
         }
-        /* Loading Screen Styles */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -50,7 +50,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Main Content Styles */
         header {
             position: fixed;
             top: 0;
@@ -144,19 +143,78 @@
         }
         .hero {
             text-align: center;
-            background: linear-gradient(45deg, rgba(255, 111, 97, 0.1), rgba(255, 160, 122, 0.1));
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            position: relative;
+            padding: 0;
+            margin: 0;
+            height: 100vh; /* Full viewport height */
         }
-        .hero h1 {
-            font-size: 3rem;
-            color: #FF6F61;
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100%; /* Match hero height */
+            overflow: hidden;
+        }
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        .carousel-images img {
+            width: 100vw;
+            height: 100%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .carousel-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 800px;
+        }
+        .carousel-content h1 {
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            animation: fadeIn 1s ease-in;
         }
-        .hero p {
+        .carousel-content p {
             font-size: 1.3rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
+            margin-bottom: 2rem;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: none; /* More transparent */
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10; /* Ensure buttons stay within carousel */
+        }
+        .carousel-btn:hover {
+            background: none; /* Slightly less transparent on hover */
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .carousel-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        .prev-btn {
+            left: 15px;
+        }
+        .next-btn {
+            right: 15px;
         }
         .btn {
             background: linear-gradient(45deg, #FF6F61, #FFA07A);
@@ -178,56 +236,6 @@
         #about p {
             max-width: 800px;
             margin: 1rem auto;
-        }
-        .carousel {
-            position: relative;
-            max-width: 600px;
-            margin: 2rem auto;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .carousel-images {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-        .carousel-images img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(45deg, rgba(255, 111, 97, 0.8), rgba(255, 160, 122, 0.8));
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .carousel-btn:hover {
-            background: linear-gradient(45deg, #FF6F61, #FFA07A);
-            transform: translateY(-50%) scale(1.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-        .carousel-btn:active {
-            transform: translateY(-50%) scale(0.95);
-        }
-        .prev-btn {
-            left: 15px;
-        }
-        .next-btn {
-            right: 15px;
         }
         #services {
             text-align: center;
@@ -368,19 +376,15 @@
             to { opacity: 1; }
         }
         @media (max-width: 768px) {
-            .hero h1 { font-size: 2rem; }
+            .carousel-content h1 { font-size: 2rem; }
+            .carousel-content p { font-size: 1rem; }
             header { padding: 1rem; }
             nav.desktop-nav { display: none; }
-            nav.mobile-nav {
-                display: flex;
-            }
-            .carousel { max-width: 100%; }
-            .carousel-images img { height: 300px; }
+            nav.mobile-nav { display: flex; }
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
     <div id="loading-screen">
         <img src="bagel.png" alt="Loading..." class="loader">
     </div>
@@ -398,23 +402,25 @@
         </nav>
     </header>
     <section id="home" class="hero">
-        <h1>Artisanal Baking with Soul</h1>
-        <p>Handcrafted breads and pastries made with passion in small batches.</p>
-        <a href="#contact" class="btn">Order Now</a>
-    </section>
-    <section id="about">
-        <h2>Our Story</h2>
-        <p>Flour & Flame Bakery was born from Elena Russo's lifelong love affair with dough and fire. Growing up in a small village near Naples, Italy, Elena spent her childhood watching her nonna knead rustic sourdough loaves in a wood-fired oven, filling the air with the scent of toasted wheat. That magic stayed with her when she moved to Hearthville fifteen years ago, dreaming of bringing authentic, soulful baking to her new home.</p>
-        <p>In 2018, after years of perfecting her craft and sourcing the finest local grains, Elena opened Flour & Flame in a cozy corner of Baker’s Lane. What started as a one-woman operation has grown into a beloved community staple, where every loaf tells a story of tradition, patience, and a touch of Italian flair. We’re not just a bakery—we’re a family dedicated to slow, honest baking, using heirloom recipes and sustainable ingredients to create flavors that warm the heart.</p>
         <div class="carousel">
             <div class="carousel-images">
                 <img src="kneading.jpg" alt="Hands kneading dough">
                 <img src="oven.jpg" alt="Wood-fired oven">
                 <img src="fresh.jpg" alt="Freshly baked bread display">
             </div>
-            <button class="carousel-btn prev-btn"><</button>
-            <button class="carousel-btn next-btn">></button>
+            <div class="carousel-content">
+                <h1>Artisanal Baking with Soul</h1>
+                <p id="carousel-subtitle"></p>
+                <a href="#contact" class="btn">Order Now</a>
+            </div>
+            <button class="carousel-btn prev-btn"></button>
+            <button class="carousel-btn next-btn"></button>
         </div>
+    </section>
+    <section id="about">
+        <h2>Our Story 🥯</h2>
+        <p>Flour & Flame Bakery was born from Elena Russo's lifelong love affair with dough and fire. Growing up in a small village near Naples, Italy, Elena spent her childhood watching her nonna knead rustic sourdough loaves in a wood-fired oven, filling the air with the scent of toasted wheat. That magic stayed with her when she moved to Hearthville fifteen years ago, dreaming of bringing authentic, soulful baking to her new home.</p>
+        <p>In 2018, after years of perfecting her craft and sourcing the finest local grains, Elena opened Flour & Flame in a cozy corner of Baker’s Lane. What started as a one-woman operation has grown into a beloved community staple, where every loaf tells a story of tradition, patience, and a touch of Italian flair. We’re not just a bakery—we’re a family dedicated to slow, honest baking, using heirloom recipes and sustainable ingredients to create flavors that warm the heart.</p>
     </section>
     <section id="services">
         <h2>Our Offerings</h2>
@@ -476,13 +482,12 @@
         </ul>
     </nav>
     <script>
-        // Loading Screen Logic
         const loadingScreen = document.getElementById('loading-screen');
         window.addEventListener('load', () => {
             setTimeout(() => {
                 loadingScreen.classList.add('hidden');
-                document.body.style.overflow = 'auto'; // Restore scrolling
-            }, 5000); // 5-second delay
+                document.body.style.overflow = 'auto';
+            }, 5000);
         });
 
         const navLinks = document.querySelectorAll('nav a');
@@ -524,24 +529,31 @@
             alert('Thanks for reaching out! Elena or a team member will respond soon.');
         });
 
-        // Carousel functionality
         const carouselImages = document.querySelector('.carousel-images');
         const images = carouselImages.querySelectorAll('img');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
+        const subtitle = document.getElementById('carousel-subtitle');
         let currentIndex = 0;
         let autoSlideInterval;
+
+        const subtitles = [
+            "Handcrafted breads made with passion",
+            "Baked fresh in our wood-fired oven",
+            "Small batches for maximum flavor"
+        ];
 
         function updateCarousel() {
             const offset = -currentIndex * 100;
             carouselImages.style.transform = `translateX(${offset}%)`;
+            subtitle.textContent = subtitles[currentIndex];
         }
 
         function startAutoSlide() {
             autoSlideInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % images.length;
                 updateCarousel();
-            }, 3000);
+            }, 10000);
         }
 
         function stopAutoSlide() {
@@ -552,17 +564,18 @@
             stopAutoSlide();
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 5000);
+            setTimeout(startAutoSlide, 10000);
         });
 
         nextBtn.addEventListener('click', () => {
             stopAutoSlide();
             currentIndex = (currentIndex + 1) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 5000);
+            setTimeout(startAutoSlide, 10000);
         });
 
         startAutoSlide();
+        updateCarousel();
 
         window.addEventListener('scroll', updateActiveLink);
         updateActiveLink();
