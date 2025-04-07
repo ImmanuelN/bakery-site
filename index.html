@@ -25,7 +25,7 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            background: linear-gradient(90deg, #FF6F61 0%, #FFA07A 100%);
             padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
@@ -70,7 +70,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            background: linear-gradient(90deg, #FF6F61 0%, #FFA07A 100%);
             padding: 0.5rem 0;
             z-index: 999;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
@@ -114,12 +114,12 @@
         }
         .hero {
             text-align: center;
-            background: linear-gradient(45deg, rgba(107, 72, 255, 0.1), rgba(0, 221, 235, 0.1));
+            background: linear-gradient(45deg, rgba(255, 111, 97, 0.1), rgba(255, 160, 122, 0.1));
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
         }
         .hero h1 {
             font-size: 3rem;
-            color: #6b48ff;
+            color: #FF6F61;
             margin-bottom: 1rem;
             animation: fadeIn 1s ease-in;
         }
@@ -129,7 +129,7 @@
             margin: 0 auto 2rem;
         }
         .btn {
-            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            background: linear-gradient(45deg, #FF6F61, #FFA07A);
             color: white;
             padding: 0.8rem 2rem;
             text-decoration: none;
@@ -175,7 +175,7 @@
             height: 40px;
             border-radius: 50%;
             border: none;
-            background: linear-gradient(45deg, rgba(107, 72, 255, 0.8), rgba(0, 221, 235, 0.8));
+            background: linear-gradient(45deg, rgba(255, 111, 97, 0.8), rgba(255, 160, 122, 0.8));
             color: white;
             font-size: 1.2rem;
             cursor: pointer;
@@ -186,7 +186,7 @@
             justify-content: center;
         }
         .carousel-btn:hover {
-            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            background: linear-gradient(45deg, #FF6F61, #FFA07A);
             transform: translateY(-50%) scale(1.1);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
@@ -223,7 +223,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, rgba(107, 72, 255, 0.1), rgba(0, 221, 235, 0.1));
+            background: linear-gradient(45deg, rgba(255, 111, 97, 0.1), rgba(255, 160, 122, 0.1));
             transform: rotate(30deg);
             transition: all 0.5s;
         }
@@ -262,7 +262,7 @@
         blockquote::before {
             content: '“';
             font-size: 3rem;
-            color: #6b48ff;
+            color: #FF6F61;
             position: absolute;
             top: 0;
             left: 1rem;
@@ -271,7 +271,7 @@
             display: block;
             margin-top: 1rem;
             font-style: normal;
-            color: #6b48ff;
+            color: #FF6F61;
         }
         #contact {
             text-align: center;
@@ -294,11 +294,11 @@
             transition: border-color 0.3s;
         }
         form input:focus, form textarea:focus {
-            border-color: #6b48ff;
+            border-color: #FF6F61;
             outline: none;
         }
         form button {
-            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            background: linear-gradient(45deg, #FF6F61, #FFA07A);
             color: white;
             padding: 0.8rem 2rem;
             border: none;
@@ -310,18 +310,19 @@
             margin-top: 2rem;
         }
         footer {
-            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            background: linear-gradient(90deg, #8B4513 0%, #FF6F61 100%);
             color: white;
             padding: 2rem;
             text-align: center;
             clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
             position: relative;
             z-index: 1;
-            margin-top: auto; /* Pushes footer to bottom */
-            flex-grow: 1; /* Allows footer to expand */
+            margin-top: auto;
+            flex-grow: 1;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding-bottom: 70px;
         }
         .social-media a {
             color: white;
@@ -479,31 +480,50 @@
             alert('Thanks for reaching out! Elena or a team member will respond soon.');
         });
 
+        // Carousel functionality
         const carouselImages = document.querySelector('.carousel-images');
         const images = carouselImages.querySelectorAll('img');
         const prevBtn = document.querySelector('.prev-btn');
         const nextBtn = document.querySelector('.next-btn');
         let currentIndex = 0;
+        let autoSlideInterval;
 
         function updateCarousel() {
             const offset = -currentIndex * 100;
             carouselImages.style.transform = `translateX(${offset}%)`;
         }
 
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                currentIndex = (currentIndex + 1) % images.length;
+                updateCarousel();
+            }, 3000); // Slide every 3 seconds
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
         prevBtn.addEventListener('click', () => {
+            stopAutoSlide();
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateCarousel();
+            setTimeout(startAutoSlide, 5000); // Resume after 5 seconds of inactivity
         });
 
         nextBtn.addEventListener('click', () => {
+            stopAutoSlide();
             currentIndex = (currentIndex + 1) % images.length;
             updateCarousel();
+            setTimeout(startAutoSlide, 5000); // Resume after 5 seconds of inactivity
         });
+
+        // Start the auto-sliding when page loads
+        startAutoSlide();
 
         window.addEventListener('scroll', updateActiveLink);
         updateActiveLink();
 
-        // Update footer year dynamically
         document.getElementById('current-year').textContent = new Date().getFullYear();
     </script>
 </body>
