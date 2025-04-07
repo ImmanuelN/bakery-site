@@ -553,7 +553,7 @@
             autoSlideInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % images.length;
                 updateCarousel();
-            }, 10000);
+            }, 5000);
         }
 
         function stopAutoSlide() {
@@ -564,14 +564,14 @@
             stopAutoSlide();
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 10000);
+            setTimeout(startAutoSlide, 5000);
         });
 
         nextBtn.addEventListener('click', () => {
             stopAutoSlide();
             currentIndex = (currentIndex + 1) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 10000);
+            setTimeout(startAutoSlide, 5000);
         });
 
         startAutoSlide();
