@@ -20,7 +20,37 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow: hidden; /* Prevent scrolling during loading */
         }
+        /* Loading Screen Styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #FF6F61 0%, #FFA07A 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .loader {
+            width: 100px;
+            height: 100px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Main Content Styles */
         header {
             position: fixed;
             top: 0;
@@ -350,6 +380,11 @@
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <img src="bagel.png" alt="Loading..." class="loader">
+    </div>
+
     <header>
         <div class="logo">Flour & Flame</div>
         <nav class="desktop-nav">
@@ -441,6 +476,15 @@
         </ul>
     </nav>
     <script>
+        // Loading Screen Logic
+        const loadingScreen = document.getElementById('loading-screen');
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Restore scrolling
+            }, 5000); // 5-second delay
+        });
+
         const navLinks = document.querySelectorAll('nav a');
         const mobileNavLinks = document.querySelectorAll('nav.mobile-nav a');
 
@@ -497,7 +541,7 @@
             autoSlideInterval = setInterval(() => {
                 currentIndex = (currentIndex + 1) % images.length;
                 updateCarousel();
-            }, 3000); // Slide every 3 seconds
+            }, 3000);
         }
 
         function stopAutoSlide() {
@@ -508,17 +552,16 @@
             stopAutoSlide();
             currentIndex = (currentIndex - 1 + images.length) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 5000); // Resume after 5 seconds of inactivity
+            setTimeout(startAutoSlide, 5000);
         });
 
         nextBtn.addEventListener('click', () => {
             stopAutoSlide();
             currentIndex = (currentIndex + 1) % images.length;
             updateCarousel();
-            setTimeout(startAutoSlide, 5000); // Resume after 5 seconds of inactivity
+            setTimeout(startAutoSlide, 5000);
         });
 
-        // Start the auto-sliding when page loads
         startAutoSlide();
 
         window.addEventListener('scroll', updateActiveLink);
