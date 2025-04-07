@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flour & Flame Bakery - Artisanal Breads & Pastries</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #2d2d2d;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding-top: 80px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        nav.desktop-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+        nav.desktop-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s;
+        }
+        nav.desktop-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #fff;
+            transition: width 0.3s;
+        }
+        nav.desktop-nav a:hover::after {
+            width: 100%;
+        }
+        nav.mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            padding: 0.5rem 0;
+            z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+        }
+        nav.mobile-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 10px;
+            gap: clamp(1rem, 5vw, 2rem);
+        }
+        nav.mobile-nav a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            padding: 0.5rem;
+            transition: transform 0.3s;
+        }
+        nav.mobile-nav a img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+        }
+        nav.mobile-nav a.active {
+            border: 2px solid white;
+            border-radius: 4px;
+        }
+        nav.mobile-nav a:hover {
+            transform: scale(1.2);
+        }
+        section {
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        .hero {
+            text-align: center;
+            background: linear-gradient(45deg, rgba(107, 72, 255, 0.1), rgba(0, 221, 235, 0.1));
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: #6b48ff;
+            margin-bottom: 1rem;
+            animation: fadeIn 1s ease-in;
+        }
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        .btn {
+            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            color: white;
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 25px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        #about {
+            text-align: center;
+            background: white;
+            clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
+        }
+        #about p {
+            max-width: 800px;
+            margin: 1rem auto;
+        }
+        .carousel {
+            position: relative;
+            max-width: 600px;
+            margin: 2rem auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        .carousel-images img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(45deg, rgba(107, 72, 255, 0.8), rgba(0, 221, 235, 0.8));
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-btn:hover {
+            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .carousel-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        .prev-btn {
+            left: 15px;
+        }
+        .next-btn {
+            right: 15px;
+        }
+        #services {
+            text-align: center;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .service {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .service::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, rgba(107, 72, 255, 0.1), rgba(0, 221, 235, 0.1));
+            transform: rotate(30deg);
+            transition: all 0.5s;
+        }
+        .service:hover::before {
+            top: -20%;
+        }
+        .service:hover {
+            transform: translateY(-10px);
+        }
+        .service img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        #testimonials {
+            text-align: center;
+            clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 90%);
+            background: white;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        blockquote {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            position: relative;
+            font-style: italic;
+        }
+        blockquote::before {
+            content: '“';
+            font-size: 3rem;
+            color: #6b48ff;
+            position: absolute;
+            top: 0;
+            left: 1rem;
+        }
+        cite {
+            display: block;
+            margin-top: 1rem;
+            font-style: normal;
+            color: #6b48ff;
+        }
+        #contact {
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        form {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+        form input:focus, form textarea:focus {
+            border-color: #6b48ff;
+            outline: none;
+        }
+        form button {
+            background: linear-gradient(45deg, #6b48ff, #00ddeb);
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .contact-info {
+            margin-top: 2rem;
+        }
+        footer {
+            background: linear-gradient(90deg, #6b48ff 0%, #00ddeb 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+            position: relative;
+            z-index: 1;
+            margin-top: auto; /* Pushes footer to bottom */
+            flex-grow: 1; /* Allows footer to expand */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .social-media a {
+            color: white;
+            margin: 0 1rem;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .social-media a:hover {
+            transform: scale(1.2);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            header { padding: 1rem; }
+            nav.desktop-nav { display: none; }
+            nav.mobile-nav {
+                display: flex;
+            }
+            .carousel { max-width: 100%; }
+            .carousel-images img { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Flour & Flame</div>
+        <nav class="desktop-nav">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#services">Offerings</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="home" class="hero">
+        <h1>Artisanal Baking with Soul</h1>
+        <p>Handcrafted breads and pastries made with passion in small batches.</p>
+        <a href="#contact" class="btn">Order Now</a>
+    </section>
+    <section id="about">
+        <h2>Our Story</h2>
+        <p>Flour & Flame Bakery was born from Elena Russo's lifelong love affair with dough and fire. Growing up in a small village near Naples, Italy, Elena spent her childhood watching her nonna knead rustic sourdough loaves in a wood-fired oven, filling the air with the scent of toasted wheat. That magic stayed with her when she moved to Hearthville fifteen years ago, dreaming of bringing authentic, soulful baking to her new home.</p>
+        <p>In 2018, after years of perfecting her craft and sourcing the finest local grains, Elena opened Flour & Flame in a cozy corner of Baker’s Lane. What started as a one-woman operation has grown into a beloved community staple, where every loaf tells a story of tradition, patience, and a touch of Italian flair. We’re not just a bakery—we’re a family dedicated to slow, honest baking, using heirloom recipes and sustainable ingredients to create flavors that warm the heart.</p>
+        <div class="carousel">
+            <div class="carousel-images">
+                <img src="kneading.jpg" alt="Hands kneading dough">
+                <img src="oven.jpg" alt="Wood-fired oven">
+                <img src="fresh.jpg" alt="Freshly baked bread display">
+            </div>
+            <button class="carousel-btn prev-btn"><</button>
+            <button class="carousel-btn next-btn">></button>
+        </div>
+    </section>
+    <section id="services">
+        <h2>Our Offerings</h2>
+        <div class="services-grid">
+            <div class="service">
+                <img src="sourdough.jpg" alt="Freshly baked sourdough bread">
+                <h3>Sourdough Bliss</h3>
+                <p>Our signature slow-fermented sourdough with a perfect crust.</p>
+            </div>
+            <div class="service">
+                <img src="pastries.jpg" alt="Assorted pastries">
+                <h3>Flaky Pastries</h3>
+                <p>Buttery croissants and seasonal fruit danishes.</p>
+            </div>
+            <div class="service">
+                <img src="cake.jpg" alt="Decorated custom cake">
+                <h3>Custom Cakes</h3>
+                <p>Bespoke cakes for your special occasions.</p>
+            </div>
+        </div>
+    </section>
+    <section id="testimonials">
+        <h2>Baker’s Fans</h2>
+        <div class="testimonials-grid">
+            <blockquote>
+                <p>"Elena’s sourdough is the best I’ve ever tasted - pure magic!"</p>
+                <cite>Marcus Teller, Local Foodie</cite>
+            </blockquote>
+            <blockquote>
+                <p>"The pastries are like a warm hug from my Italian nonna."</p>
+                <cite>Sophia Moretti, Regular Customer</cite>
+            </blockquote>
+        </div>
+    </section>
+    <section id="contact">
+        <h2>Get In Touch</h2>
+        <form id="contact-form">
+            <input type="text" placeholder="Your Name" name="name">
+            <input type="email" placeholder="Your Email" name="email">
+            <textarea placeholder="Tell us about your order or question" name="message" rows="5"></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+        <div class="contact-info">
+            <p>45 Baker’s Lane, Hearthville</p>
+            <p>(555) 321-7890</p>
+            <p>orders@flourandflame.com</p>
+        </div>
+    </section>
+    <footer>
+        <p id="footer-text">© <span id="current-year"></span> Flour & Flame Bakery - Crafted with Love</p>
+    </footer>
+    <nav class="mobile-nav">
+        <ul>
+            <li><a href="#home"><img src="home.png" alt="Home"></a></li>
+            <li><a href="#about"><img src="book.png" alt="Our Story"></a></li>
+            <li><a href="#services"><img src="price-tag.png" alt="Offerings"></a></li>
+            <li><a href="#testimonials"><img src="email.png" alt="Testimonials"></a></li>
+            <li><a href="#contact"><img src="customer-service.png" alt="Contact"></a></li>
+        </ul>
+    </nav>
+    <script>
+        const navLinks = document.querySelectorAll('nav a');
+        const mobileNavLinks = document.querySelectorAll('nav.mobile-nav a');
+
+        function updateActiveLink() {
+            const scrollPosition = window.scrollY + 80;
+            const sections = document.querySelectorAll('section');
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    mobileNavLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                document.getElementById(targetId).scrollIntoView({ behavior: 'smooth' });
+                mobileNavLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        const form = document.getElementById('contact-form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thanks for reaching out! Elena or a team member will respond soon.');
+        });
+
+        const carouselImages = document.querySelector('.carousel-images');
+        const images = carouselImages.querySelectorAll('img');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const offset = -currentIndex * 100;
+            carouselImages.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateCarousel();
+        });
+
+        window.addEventListener('scroll', updateActiveLink);
+        updateActiveLink();
+
+        // Update footer year dynamically
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
